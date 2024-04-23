@@ -1,7 +1,7 @@
 {
   "name": "api-tickets-control",
   "version": "1.0.0",
-  "type": "module",
+  "type": "commonjs",
   "description": "Rest API for tickets control",
   "main": "index.js",
   "scripts": {
