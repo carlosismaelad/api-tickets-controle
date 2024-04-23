@@ -1,4 +1,4 @@
-const env = require('env-var')
+import env from 'env-var'
 
 const config = {
     host: env.get('HOST').asString(),
@@ -8,4 +8,4 @@ const config = {
     database: env.get('DATABASE').asString()
 }
 
-module.exports = config
+export default config
