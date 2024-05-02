@@ -1,5 +1,7 @@
-import pgp from 'pg-promise'
+import pgPromise from 'pg-promise'
 import env from 'env-var'
+
+const pgp = pgPromise()
 
 const db = pgp({
   host: env.get('HOST').asString(),
