@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
 
-export class Ticket{
+class Ticket{
     constructor(analyst, client, description, images, resolutionDeadline, updatedAt) {
         this.id = uuidv4()
         this.analyst = analyst
@@ -11,3 +11,5 @@ export class Ticket{
         this.updatedAt = updatedAt
     }
 }
+
+module.exports = Ticket
