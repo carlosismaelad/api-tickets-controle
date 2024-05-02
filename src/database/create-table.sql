@@ -7,5 +7,5 @@ CREATE TABLE IF NOT EXISTS tickets (
     resolutionDeadline TIMESTAMP,
     images TEXT[],
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updatedAt TIMESTAMP,
+    updatedAt TIMESTAMP
 )
