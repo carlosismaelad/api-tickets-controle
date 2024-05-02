@@ -9,3 +9,5 @@ const db = pgp({
   database: env.get('DATABASE').asString() 
 })
 
+module.exports = db
+
