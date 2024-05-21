@@ -9,8 +9,8 @@ class TicketsRepository{
 
     async findAllTickets(){
         try{
-            const tickets = await this.db.findAll("SELECT * FROM tickets")
-            return tickets ? tickets.map(ticketData => new Ticket(ticketData)) : null
+            const tickets = await this.db.findAll("SELECT * FROM tickets WHERE active = true")
+            return tickets ? tickets.map(ticketData => new Ticket(ticketData)) : []
         }catch(error){
             console.log('Houve um error ao listar tickets', error)
             return {error: 'Houve um erro ao listar todos os tickets', message: error.message, success: false}
@@ -19,7 +19,7 @@ class TicketsRepository{
 
     async findTicketById(id){
         try{
-            const storedTicket = await this.db.oneOrNone("SELECT * FROM tickets WHERE id = $1", id)
+            const storedTicket = await this.db.oneOrNone("SELECT * FROM tickets WHERE id = $1 and active = true", id)
             return storedTicket ? new Ticket(storedTicket) : null
         }catch(error){
             console.log('Houve um erro ao buscar o ticket.', error)
@@ -29,15 +29,20 @@ class TicketsRepository{
 
     async updateTicket(ticket){
         try{
-            const updatedTicket = await this.db.none("UPDATE tickets SET  analyst = $2, client = $3, description = $4, resolutionDeadline = $5, images = $6, updatedAt = NOW() WHERE id = $1", [
+            const result = await this.db.result("UPDATE tickets SET  analyst = $2, client = $3, description = $4, active = $5, resolutionDeadline = $6, images = $7, updatedAt = NOW() WHERE id = $1", [
                 ticket.id,
                 ticket.analyst,
                 ticket.client,
                 ticket.description,
+                ticket.active,
                 ticket.resolutionDeadline,
                 ticket.images
             ])
-            return updatedTicket
+            if (result.rowCount > 0) {
+                return { success: true, message: 'Ticket atualizado com sucesso' };
+            } else {
+                return { success: false, message: 'Nenhum ticket foi atualizado' };
+            }
         }catch(error){
             console.log('Houve um erro ao atualizar o ticket.', error)
             return {error: 'Houve um erro ao atualizar o ticket', message: error.message, success: false}
@@ -46,15 +51,20 @@ class TicketsRepository{
 
     async createNewTicket(ticket) {
         try{
-            const newTicket = await this.db.none("INSERT INTO tickets (id, analyst, client, description, resolutionDeadline, images) VALUES ($1, $2, $3, $4, $5, $6)", [
+            const result = await this.db.result("INSERT INTO tickets (id, analyst, client, description, active, resolutionDeadline, images) VALUES ($1, $2, $3, $4, $5, $6, $7)", [
                 ticket.id,
                 ticket.analyst,
                 ticket.client,
                 ticket.description,
+                ticket.active = true,
                 ticket.resolutionDeadline,
                 ticket.images
             ]);
-            return newTicket
+            if (result.rowCount > 0) {
+                return { success: true, message: 'Ticket criado com sucesso', ticket };
+            } else {
+                return { success: false, message: 'Nenhum ticket foi criado' };
+            }
         }catch(error){
             console.log('Houve um erro ao salvar o ticket.', error)
             return {error: 'Houve um erro ao salvar o ticket', message: error.message, success: false}
@@ -63,8 +73,12 @@ class TicketsRepository{
 
     async deleteTicket(id){
         try{
-            const removedTicket = await this.db.none("DELETE FROM tickets WHERE id = $1", id)
-            return removedTicket
+            const result = await this.db.result("UPDATE tickets SET active = false WHERE id = $1", id)
+            if (result.rowCount > 0) {
+                return { success: true, message: 'Ticket excluído com sucesso' };
+            } else {
+                return { success: false, message: 'Nenhum ticket foi excluído' };
+            }
         }catch(error){
             console.log('Houve um erro ao excluir o ticket.', error)
             return {error: 'Houve um erro ao excluir o ticket', message: error.message, success: false}            
