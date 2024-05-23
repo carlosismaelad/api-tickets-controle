@@ -9,10 +9,9 @@ class TicketsRepository{
 
     async findAllTickets(){
         try{
-            const tickets = await this.db.findAll("SELECT * FROM tickets WHERE active = true")
+            const tickets = await this.db.manyOrNone("SELECT * FROM tickets WHERE active = true")
             return tickets ? tickets.map(ticketData => new Ticket(ticketData)) : []
         }catch(error){
-            console.log('Houve um error ao listar tickets', error)
             return {error: 'Houve um erro ao listar todos os tickets', message: error.message, success: false}
         }
     }
@@ -88,4 +87,4 @@ class TicketsRepository{
 
 }
 
-module.exports = TicketsRepository
+export default TicketsRepository

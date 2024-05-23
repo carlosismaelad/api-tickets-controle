@@ -22,17 +22,6 @@ class TicketsMiddleware{
         next()
     }
 
-    clientFieldValidator(req, res, next){
-        const { body } = req
-        if(body.client === undefined){
-            return res.status(400).json({ message: 'O campo "cliente" é obrigatório.' })
-        }
-        if(body.client === ''){
-            return res.status(400).json({ message: 'O campo "cliente" não pode estar vazio.' })
-        }
-        next()
-    }
-
     descriptionFieldValidator(req, res, next){
         const { body } = req
         if(body.description === undefined){

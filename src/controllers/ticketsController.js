@@ -4,12 +4,20 @@ import Ticket from '../entities/Ticket.js'
 class TicketsController{
 
     constructor(){
-        this.ticketRepository = new TicketsRepository()
+        this.ticketsRepository = new TicketsRepository()
+
+        this.findAllTickets = this.findAllTickets.bind(this);
+        this.findTicketById = this.findTicketById.bind(this);
+        this.createNewTicket = this.createNewTicket.bind(this);
+        this.updateTicket = this.updateTicket.bind(this);
+        this.deleteTicket = this.deleteTicket.bind(this);
+    
+
     }
 
     async findAllTickets(req, res){
         try{
-            const tickets = await this.ticketRepository.findAllTickets()
+            const tickets = await this.ticketsRepository.findAllTickets()
             if(tickets.error){
                 return res.status(500).json(tickets)
             }
@@ -22,7 +30,7 @@ class TicketsController{
     async findTicketById(req,res){
         const { id } = req.body
         try{
-            const ticket = await this.ticketRepository.findTicketById(id)
+            const ticket = await this.ticketsRepository.findTicketById(id)
             if(tickets.error){
                 return res.status(500).json(ticket)
             }
@@ -35,11 +43,11 @@ class TicketsController{
         }
     }
 
-    async crateNewTicket(req, res){
+    async createNewTicket(req, res){
         const ticketData = req.body
         try{
             const ticket = new Ticket(ticketData)
-            const result = await this.ticketRepository.crateNewTicket(ticket)
+            const result = await this.ticketsRepository.crateNewTicket(ticket)
             if (result.error) {
                 return res.status(500).json(result);
             }
@@ -58,7 +66,7 @@ class TicketsController{
             }
             ticketData.id = id
             const ticket = new Ticket(ticketData)
-            const result = this.ticketRepository.updateTicket(ticket)
+            const result = this.ticketsRepository.updateTicket(ticket)
             if(result.error){
                 return res.status(500).json(result);
             }
