@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS tickets (
     images TEXT[],
     createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updatedAt TIMESTAMP,
-    acttive BOOLEAN
+    active BOOLEAN
 )

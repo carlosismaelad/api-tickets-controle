@@ -6,12 +6,13 @@ import env from 'env-var'
 const pgp = pgPromise()
 
 const db = pgp({
-  host: env.get('PG_HOST').asString(),
-  user: env.get('PG_USER').asString(),
-  password: env.get('PG_PASSWORD').asString(),
-  port: env.get('PG_PORT').asPortNumber(),
-  database: env.get('PG_DATABASE').asString() 
+  host: env.get('HOST').asString(),
+  user: env.get('USER').asString(),
+  password: env.get('PASSWORD').asString(),
+  port: env.get('PORT').asPortNumber(),
+  database: env.get('DATABASE').asString() 
 })
+
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const filePath = path.join(__dirname, "./create-table.sql")
